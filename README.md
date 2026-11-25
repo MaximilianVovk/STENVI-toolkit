@@ -120,3 +120,7 @@ python plotting.py IN.sei --confront OTHER.sei
 - [ ] Handle handedness and angular-convention changes explicitly; do not assume a proper rotation matrix alone resolves them.
 - [ ] Later add optional SPICE support to obtain transformations from named frames, epochs, and the required kernels/frame definitions.
 - [ ] Require orbit/state and attitude information when necessary to define the requested local or instrument frame.
+
+### 5. Add Gravitational
+
+- [ ] Add gravitational focussing matrix. 
