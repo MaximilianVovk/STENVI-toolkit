@@ -68,13 +68,11 @@ python plotting.py IN.sei --confront OTHER.sei
 | Path | Responsibility |
 | --- | --- |
 | `README.md` | Purpose, current capabilities, examples, and roadmap |
-| `IADC-23-03_Standard_Environment_Interface(STENVI)_Rev.1.0.pdf` | IADC specification of the STENVI `.sei` file format |
+| `docs/IADC-23-03_Standard_Environment_Interface(STENVI)_Rev.1.0.pdf` | IADC specification of the STENVI `.sei` file format |
+| `docs/conventions.md` | File semantics, units, directions, frames, and numerical assumptions (planned) |
 | `stenvi_toolkit/sei_formatfix.py` | Corrects `.sei` formatting and fixes common format/read errors (existing) |
 | `stenvi_toolkit/plotting.py` | Existing plots and future visualization helpers |
-| `stenvi_toolkit/zero_mass.py` | Existing zero-mass functionality; rename if a more precise term is appropriate |
-| `pyproject.toml` | Package metadata and dependencies (planned) |
-| `stenvi_toolkit/io.py` | STENVI reading, validation, and writing (planned) |
-| `stenvi_toolkit/environment.py` | Shared data model, dimensions, units, and metadata (planned) |
+| `stenvi_toolkit/zero_mass.py` | Existing zero-mass functionality |
 | `stenvi_toolkit/flux.py` | Differential representation, interpolation, and integration (planned) |
 | `stenvi_toolkit/selection.py` | Particle-property limits and directional masks (planned) |
 | `stenvi_toolkit/sampling.py` | Weighted particle and aperture sampling (planned) |
@@ -83,4 +81,42 @@ python plotting.py IN.sei --confront OTHER.sei
 | `stenvi_toolkit/spice.py` | Optional later SPICE integration (planned) |
 | `examples/` | Small reproducible workflows and example (planned) |
 | `tests/` | Numerical checks and small synthetic fixtures (planned) |
-| `docs/conventions.md` | File semantics, units, directions, frames, and numerical assumptions (planned) |
+
+
+## Implementation roadmap
+
+### 1. Standardize the data interface
+
+- [ ] Document which quantities are bin-integrated, cumulative, or differential; distinguish bin edges from bin centers.
+- [ ] Explicitly record angular conventions: axis directions, azimuth origin and sense, elevation definition, handedness, and incoming-radiant versus particle-travel direction.
+
+### 2. Rebin and convert angular grids
+
+- [ ] Derive a bin-average differential representation from the stored flux, using the correct bin measure and units.
+- [ ] Change angular resolution and bin boundaries while conserving integrated flux within a stated numerical tolerance.
+- [ ] Investigate PCHIP interpolation as discussed; compare it with a simple baseline before selecting a default.
+- [ ] Integrate above a threshold or between arbitrary limits, including limits inside a source bin.
+- [ ] Extend selection to speed and other particle properties actually present in the input file, preserving their joint distribution.
+- [ ] Define behavior outside the available data range; avoid silent extrapolation.
+- [ ] Investigate igloo and HEALPix grids as separate optional grid types; they are not interchangeable names.
+- [ ] Compare an integration-based approach with a numerical sampling approach for estimating contributions to destination bins.
+- [ ] Record interpolation assumptions, sampling settings, and numerical error estimates in the outputs.
+
+### 3. Select arrival directions and sample particles
+
+- [ ] Evaluate flux within an azimuth/elevation region or a circular cone around a specified pointing direction.
+- [ ] Support sampling onto a user-defined aperture, with the projected-area treatment matched to the source flux convention.
+- [ ] Handle bins partly intersected by the selection boundary instead of selecting solely by bin-center position.
+- [ ] Use spherical solid angles, with correct treatment of azimuth wraparound and the poles.
+- [ ] Combine directional selection with mass/size and speed limits.
+- [ ] Convert incident flux to expected counts for a specified collecting geometry and exposure time.
+
+### 4. Rotate into a different reference frame
+
+- [ ] Accept a supplied rotation matrix first, independently of SPICE or orbit propagation.
+- [ ] Transform directions and redistribute flux onto the destination angular grid, including overlaps between rotated source bins and destination bins.
+- [ ] Preserve total all-sky flux for a pure rotation, without masking or clipping.
+- [ ] Explicitly distinguish equatorial J2000, ecliptic J2000, and any local/orbital frame.
+- [ ] Handle handedness and angular-convention changes explicitly; do not assume a proper rotation matrix alone resolves them.
+- [ ] Later add optional SPICE support to obtain transformations from named frames, epochs, and the required kernels/frame definitions.
+- [ ] Require orbit/state and attitude information when necessary to define the requested local or instrument frame.
