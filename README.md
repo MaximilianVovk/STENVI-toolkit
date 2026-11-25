@@ -5,7 +5,7 @@ A Python toolkit for visualizing and processing STENVI particle environments, wi
 
 Provide a reusable Python interface for working with STENVI environment files. The planned toolkit will evaluate flux over user-defined particle-property ranges and arrival directions, generate representative particle samples, and convert distributions between angular grids and reference frames.
 
-The aim is to make different applications use the same documented interpretation of the environment data. ATHENA micropore and detector studies are one intended application. The current tools are written for and tested on IMEM2 `.sei` files.
+The aim is to make different applications use the same documented interpretation of the environment data. The current tools are written for and tested on IMEM2 `.sei` files.
 
 ## STENVI file format
 
@@ -81,6 +81,6 @@ python plotting.py IN.sei --confront OTHER.sei
 | `stenvi_toolkit/grids.py` | Angular geometry, solid angles, and rebinning (planned) |
 | `stenvi_toolkit/frames.py` | Matrix-based direction transformations and rotated rebinning (planned) |
 | `stenvi_toolkit/spice.py` | Optional later SPICE integration (planned) |
-| `examples/` | Small reproducible workflows, including a future ATHENA interface example (planned) |
+| `examples/` | Small reproducible workflows and example (planned) |
 | `tests/` | Numerical checks and small synthetic fixtures (planned) |
 | `docs/conventions.md` | File semantics, units, directions, frames, and numerical assumptions (planned) |
